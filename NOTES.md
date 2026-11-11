@@ -115,22 +115,26 @@ Cause: the original prompt only says "Dẫn nguồn từ tool", and the loop acc
 I first ran everything with Haiku 5.5 as agent and judge, then changed the judge and the model to see whether the measurement or the agent limited the score.
 Every row is a full 22-case run; a pair only compares within its own row group, because each group has its own config.
 
-| Agent / judge | Agent version | Score | Note |
-| --- | --- | --- | --- |
-| Haiku 5.5 / Haiku 5.5 | CP3 | null | judge timed out on E5; discarded, all 22 cases rerun |
-| Haiku 5.5 / Haiku 5.5 | CP3 | 93.68 | first `eval_before.json` |
-| Haiku 5.5 / Haiku 5.5 | CP3 | 94.91 | same agent again: run-to-run noise |
-| Haiku 5.5 / Haiku 5.5 | + source check, partial-count rule | 93.73 | URLs fixed (7 missing to 0), total flat |
-| Haiku 5.5 / Haiku 5.5 | + prompt rules (round 2) | 94.18 | |
-| Haiku 5.5 / Haiku 5.5 | + more prompt rules (round 3) | 93.59 | |
-| Haiku 5.5 / Haiku 5.5 | + self-review (option A) | null | judge timed out on H7; rerun |
-| Haiku 5.5 / Haiku 5.5 | option A | 94.50 | |
-| Haiku 5.5 / Haiku 5.5 | option A | 94.64 | stability run |
-| Haiku 5.5 / Sonnet 5.5 | CP3 | 92.41 | independent, stronger judge |
-| Haiku 5.5 / Sonnet 5.5 | option A | 94.41 | +2.00 over CP3 |
-| DeepSeek Flash / DeepSeek Flash | CP3 | 95.45 | submitted `eval_before.json` |
-| DeepSeek Flash / DeepSeek Flash | option A | 95.45 | H5 = 20 in both; found the injection echo |
-| DeepSeek Flash / DeepSeek Flash | option A + injection rule | 99.50 | submitted `eval_after.json` |
+Every run's full output (answers, traces, judge reasons, config) is in the file named in the last column.
+
+| Agent / judge | Agent version | Score | Note | File |
+| --- | --- | --- | --- | --- |
+| Haiku 5.5 / Haiku 5.5 | CP3 | null | judge timed out on E5; discarded, all 22 cases rerun | `runs/01_haiku-haiku_cp3_judge-timeout.json` |
+| Haiku 5.5 / Haiku 5.5 | CP3 | 93.68 | first `eval_before.json` | `runs/02_haiku-haiku_cp3.json` |
+| Haiku 5.5 / Haiku 5.5 | CP3 | 94.91 | same agent again: run-to-run noise | `runs/03_haiku-haiku_cp3_rerun.json` |
+| Haiku 5.5 / Haiku 5.5 | + source check, partial-count rule | 93.73 | URLs fixed (7 missing to 0), total flat | `runs/04_haiku-haiku_round1-source-check.json` |
+| Haiku 5.5 / Haiku 5.5 | + prompt rules (round 2) | 94.18 | | `runs/05_haiku-haiku_round2-prompt.json` |
+| Haiku 5.5 / Haiku 5.5 | + more prompt rules (round 3) | 93.59 | | `runs/06_haiku-haiku_round3-prompt.json` |
+| Haiku 5.5 / Haiku 5.5 | + self-review (option A) | null | judge timed out on H7; rerun | `runs/07_haiku-haiku_optionA_judge-timeout.json` |
+| Haiku 5.5 / Haiku 5.5 | option A | 94.50 | | `runs/08_haiku-haiku_optionA.json` |
+| Haiku 5.5 / Haiku 5.5 | option A | 94.64 | stability run | `runs/09_haiku-haiku_optionA_stability.json` |
+| Haiku 5.5 / Sonnet 5.5 | CP3 | 92.41 | independent, stronger judge | `runs/10_haiku-sonnet_cp3.json` |
+| Haiku 5.5 / Sonnet 5.5 | option A | 94.41 | +2.00 over CP3 | `runs/11_haiku-sonnet_optionA.json` |
+| DeepSeek Flash / DeepSeek Flash | CP3 | 95.45 | submitted | `eval_before.json` |
+| DeepSeek Flash / DeepSeek Flash | option A | 95.45 | H5 = 20 in both; found the injection echo | `runs/12_deepseek-deepseek_optionA-no-injection-rule.json` |
+| DeepSeek Flash / DeepSeek Flash | option A + injection rule | 99.50 | submitted | `eval_after.json` |
+
+The round 2 and round 3 agents were prompt variants between commits, so their code is not in the git history; their prompts are visible in the trace files only through the agent's behaviour.
 
 What I learned from changing the setup:
 
