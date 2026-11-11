@@ -1,7 +1,7 @@
 # Ghi chú phân tích · Day 04
 
-Họ và tên:
-MSSV:
+Họ và tên: Lưu Nguyễn Chí Đức
+MSSV: 2A202603923
 
 ## 1. Case được chọn
 
