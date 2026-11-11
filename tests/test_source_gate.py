@@ -49,6 +49,11 @@ class SourceGateTests(unittest.TestCase):
         for field in ('matching_incidents_in_last_50', 'updates_total', 'truncated'):
             self.assertIn(field, SYSTEM_PROMPT)
 
+    def test_prompt_names_the_source_fields_to_cite(self):
+        # Round 2: the prompt asks for the URL up front; the loop check stays as a safety net.
+        self.assertIn('trường url', SYSTEM_PROMPT)
+        self.assertIn('trường source', SYSTEM_PROMPT)
+
 
 if __name__ == '__main__':
     unittest.main()
